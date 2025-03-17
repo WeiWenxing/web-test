@@ -17,13 +17,13 @@
 <body>
     <div class="container">
         <h1 class="text-center mb-4">RSS Feeds</h1>
-        <div id="feed-container" class="row row-cols-1 row-cols-md-2 g-4"></div>
+        <div id="feed-container" class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"></div>
     </div>
 
     <script>
         async function fetchFeeds() {
             try {
-                const rssUrl = 'https://www.gcores.com/rss';
+                const rssUrl = 'https://rsshub.app/cosplaytele';
                 const proxyUrl = 'https://api.allorigins.win/raw?url=';
                 const fullUrl = proxyUrl + encodeURIComponent(rssUrl);
                 const response = await fetch(fullUrl);
@@ -39,17 +39,37 @@
                     const title = item.querySelector('title').textContent;
                     const link = item.querySelector('link').textContent;
                     const description = item.querySelector('description').textContent;
-                    const card = document.createElement('div');
-                    card.classList.add('col');
-                    card.innerHTML = `
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title"><a href="${link}" target="_blank">${title}</a></h5>
-                                <p class="card-text">${description}</p>
+
+                    // 创建临时元素来解析description中的HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = description;
+
+                    // 提取第一张图片（如果有）
+                    let imgElement = '';
+                    const firstImg = tempDiv.querySelector('img');
+                    if (firstImg) {
+                        // 保持图片等比例
+                        firstImg.removeAttribute('width');
+                        firstImg.removeAttribute('height');
+                        firstImg.style.maxWidth = '100%';
+                        firstImg.style.height = 'auto';
+                        imgElement = firstImg.outerHTML;
+                    }
+
+                    // 将内容添加到容器中
+                    container.innerHTML += `
+                        <div class="col">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">${title}</h5>
+                                    ${imgElement}
+                                    <div class="mt-2">
+                                        <a href="${link}" target="_blank" class="text-decoration-none">detail</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     `;
-                    container.appendChild(card);
                 });
             } catch (error) {
                 console.error('Error fetching feeds:', error);
@@ -65,4 +85,4 @@
         crossorigin="anonymous"></script>
 </body>
 
-</html>    
+</html>
