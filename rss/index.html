@@ -19,10 +19,18 @@
             display: block;
         }
 
-        /* 瀑布流布局 */
-        #feed-container {
-            column-count: 2;
-            column-gap: 1rem;
+        /* 小屏幕时 2 列 */
+        @media (max-width: 991.98px) {
+            #feed-container {
+                column-count: 2;
+            }
+        }
+
+        /* 大屏幕时 4 列 */
+        @media (min-width: 992px) {
+            #feed-container {
+                column-count: 4;
+            }
         }
 
         /* 防止卡片跨列显示 */
@@ -67,9 +75,12 @@
                     card.classList.add('card');
                     card.innerHTML = `
                         <div class="card-body">
-                            <h5 class="card-title">${title}</h5>
-                            ${imgSrc ? `<img src="${imgSrc}" alt="${title}">` : ''}
-                            <a href="${link}" target="_blank">detail</a>
+                            <h5 class="card-title">
+                                ${title.length > 20 ?
+                            `<span style="font-size: 0.9rem;">${title.substring(0, 20)}... <a href="#" onclick="event.preventDefault(); this.parentNode.innerHTML = '${title.replace(/'/g, "\\'")}'">more</a></span>` :
+                            `<span style="font-size: 0.9rem;">${title}</span>`}
+                            </h5>
+                            ${imgSrc ? `<img src="${imgSrc}" alt="${title}" onclick="window.open('${link}', '_blank')" style="cursor: pointer;">` : ''}
                         </div>
                     `;
                     container.appendChild(card);
