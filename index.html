@@ -61,10 +61,13 @@
                         <div class="col">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h5 class="card-title">${title}</h5>
+                                    <h5 class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;" onclick="this.style.whiteSpace='normal'; this.style.textOverflow='clip'; this.querySelector('.more-text').style.display='none';">
+                                        ${title}
+                                        <span class="more-text" style="color: blue; font-size: 0.8em; display: inline-block;">more...</span>
+                                    </h5>
                                     ${imgElement}
                                     <div class="mt-2">
-                                        <a href="${link}" target="_blank" class="text-decoration-none">detail</a>
+                                        <a href="${link}" target="_blank" class="text-decoration-none"><u>detail</u></a>
                                     </div>
                                 </div>
                             </div>
